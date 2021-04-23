@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  kibana:
+    image: kibana:7.12.0
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    env_file:
+      - ./environment/kibana.env
+    depends_on:
+      - elasticsearch
+  elasticsearch:
+    image: elasticsearch:7.12.0
+    container_name: elasticsearch
+    ports:
+      - 9200:9200
+      - 9300:9300
+    env_file:
+      - ./environment/elasticsearch.env
+    volumes:
+      - elasticdb:/usr/share/elasticsearch/data
+    restart: always
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.12.0
+    container_name: logstash
+    ports:
+      - "9999:9999"
+    volumes:
+      - ./config/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - "C:/Users/vinicius/Documents/Flexpag/flexpag-payment-tokenizator-backend/logs/tokenizator.log:/usr/log.log"
+    depends_on:
+      - elasticsearch
+volumes:
+  elasticdb:
+    driver: local
+networks:
+  app-network:
