@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3"
 services:
   kibana:
     image: kibana:7.12.0
@@ -27,7 +27,7 @@ services:
       - "9999:9999"
     volumes:
       - ./config/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-      - "C:/Users/vinicius/Documents/Flexpag/flexpag-payment-tokenizator-backend/logs/tokenizator.log:/usr/log.log"
+      - "${LOG_PATH}:/usr/logs"
     depends_on:
       - elasticsearch
 volumes:
